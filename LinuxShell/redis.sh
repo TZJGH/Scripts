@@ -1,15 +1,19 @@
 #! /bin/bash
 # redis cluster create
 
-echo "下载文件"
 if [ ! -e /root/redis-5.0.5.tar.gz ]
 then
+echo "下载文件"
 wget "http://download.redis.io/releases/redis-5.0.5.tar.gz"
+fi
+if [ ! -e/root/redis-5.0.5 ]
+then
 echo "解压文件"
+tar xzf redis-5.0.5.tar.gz
 fi
 if [ ! -e /root/redis-5.0.5/src ]
 then
-tar xzf redis-5.0.5.tar.gz
+echo "编译中........"
 cd /root/redis-5.0.5
 make
 cd /root
@@ -21,7 +25,6 @@ portsDics=(7000 7001 7002 7003 7004 7005)
 #--------
 for dicname in ${portsDics[@]}
 do
-echo $dicname
 mkdir /root/$dicname
 #echo "bind 0.0.0.0" >> /root/$dicname/redis.conf
 echo "port $dicname" >> /root/$dicname/redis.conf
@@ -50,7 +53,8 @@ echo "WantedBy=multi-user.target" >> /etc/systemd/system/redis$dicname.service
 #--------
 sudo systemctl enable redis$dicname.service
 sudo systemctl start redis$dicname.service
-sleep 5
+sleep 3
+sudo systemctl status redis$dicname.service
 done
 fi
 #--------
