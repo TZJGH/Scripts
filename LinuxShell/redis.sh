@@ -64,5 +64,5 @@ done
 fi
 #--------
 echo "yes" | /root/redis-5.0.5/src/redis-cli --cluster create $1:7000 $1:7001 $1:7002 $1:7003 $1:7004 $1:7005 --cluster-replicas 1
-firewall-cmd --add-port 7000-7005/tcp --permanent
-firewall-cmd --reload
+sudo firewall-cmd --add-port 7000-7005/tcp --permanent
+sudo firewall-cmd --reload
