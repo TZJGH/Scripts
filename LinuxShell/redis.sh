@@ -11,7 +11,7 @@ then
 echo "=============================================================================解压文件=========================================================================================="
 tar xzf redis-5.0.5.tar.gz
 fi
-if [ ! -e /root/redis-5.0.5/src ]
+if [ ! -e /root/redis-5.0.5/src/redis-cli ]
 then
 echo "===========================================================================编译中........======================================================================================"
 cd /root/redis-5.0.5
@@ -25,7 +25,11 @@ portsDics=(7000 7001 7002 7003 7004 7005)
 #--------
 for dicname in ${portsDics[@]}
 do
+if [ ! -e /root/$dicname ]
+then
 mkdir /root/$dicname
+fi
+rm -f /root/$dicname/redis.conf
 #echo "bind 0.0.0.0" >> /root/$dicname/redis.conf
 echo "port $dicname" >> /root/$dicname/redis.conf
 echo "cluster-enabled yes" >> /root/$dicname/redis.conf
@@ -36,6 +40,7 @@ echo "protected-mode no" >> /root/$dicname/redis.conf
 #--------
 cp -rp /root/redis-5.0.5/src /root/$dicname
 #--------
+rm -f /etc/systemd/system/redis$dicname.service
 echo "[Unit]" >> /etc/systemd/system/redis$dicname.service
 echo "Description=redis cluster node $dicname" >> /etc/systemd/system/redis$dicname.service
 echo "" >> /etc/systemd/system/redis$dicname.service
