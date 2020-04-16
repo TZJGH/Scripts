@@ -1,7 +1,7 @@
 #! /bin/bash
 # redis cluster create
 
-if [ ! -n $1 ]
+if [ ! $1 ]
 then
 echo "未输入集群的ip地址"
 exit
